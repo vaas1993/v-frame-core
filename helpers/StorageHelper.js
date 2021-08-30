@@ -2,8 +2,8 @@
 export default class StorageHelper {
     /**
      * 保存一个数据
-     * @param {string} name
-     * @param {string|object} value
+     * @param {string} name 键名
+     * @param {string|object} value 需要保存的值
      */
     static set(name, value) {
         value = {
@@ -15,7 +15,7 @@ export default class StorageHelper {
 
     /**
      * 根据名称取值
-     * @param {string} name
+     * @param {string} name 键名
      * @returns {string|object}
      */
     static get(name) {
@@ -26,7 +26,7 @@ export default class StorageHelper {
     /**
      * 根据名称判断有没有该值
      * 注意，如果保存的值是null，也会返回 false
-     * @param {string} name
+     * @param {string} name 键名
      * @returns {boolean}
      */
     static has(name) {
@@ -35,7 +35,7 @@ export default class StorageHelper {
 
     /**
      * 根据名称删除值
-     * @param {string} name
+     * @param {string} name 键名
      */
     static remove(name) {
         window.localStorage.removeItem(name)
