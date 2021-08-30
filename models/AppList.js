@@ -11,6 +11,13 @@ export default class AppList {
     searchModel
 
     /**
+     * 展示模型实例
+     * 用于列表中展示时获取 label 或者其他格式化配置
+     * 不配置时会使用 searchModel 覆盖
+     */
+    showModel
+
+    /**
      * 用于展示的表单模型实例列表
      * @type {array<AppModel>}
      */
@@ -73,14 +80,6 @@ export default class AppList {
     }
 
     /**
-     * 获取一个用来取字段标签的模型实例
-     * 如果返回null，则使用 this.searchModel 取代
-     */
-    getModel() {
-        return null
-    }
-
-    /**
      * 设置分页器
      * 未设置的项将使用原有的值替代
      * @param {object<total, pagination, size>} pager
@@ -104,7 +103,7 @@ export default class AppList {
      * @returns {Object}
      */
     getBodyConfig() {
-        let model = this.getModel() || this.searchModel
+        let model = this.showModel
         return ObjectHelper.forEach(ObjectHelper.filter(this.bodyConfig, item => {
             return VFrame.getInstance().getHasPermission(item.permission)
         }), (item, field) => {
@@ -114,11 +113,13 @@ export default class AppList {
     }
 
     async onLoad(pagination, clearList = true) {
+        this.showModel = this.showModel || this.searchModel
+
         this.pager.pagination = pagination || this.pager.pagination++
         if( clearList ) {
             this.modelList = []
         }
-        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size })) {
+        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.showModel.constructor)) {
             this.modelList = this.modelList.concat(this.searchModel.response.models)
             this.setPager(this.searchModel.response.listMeta)
         }

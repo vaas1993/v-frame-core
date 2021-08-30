@@ -78,7 +78,7 @@ export default class ApiModel extends BaseModel {
      * @static
      * @returns {Promise<ApiResponse>|ApiResponse}
      */
-    async list(params = {}) {
+    async list(params = {}, model) {
         params = Object.assign(params, this.getListQueryParams())
         this.response = await Api.getInstance()
             .setGetParams(params)
@@ -87,7 +87,7 @@ export default class ApiModel extends BaseModel {
 
         if (this.response.getIsSuccess()) {
             this.response.queryParams = params
-            this.response.models = this.instanceList(this.response.getItems() || [])
+            this.response.models = (model || this.constructor).instanceList(this.response.getItems() || [])
         }
         return this.response.getIsSuccess()
     }
@@ -97,9 +97,9 @@ export default class ApiModel extends BaseModel {
      * @param list
      * @returns {*}
      */
-    instanceList(list) {
+    static instanceList(list) {
         return list.map(data => {
-            let model = new this.constructor()
+            let model = new this()
             model.setSources(data)
             return model
         })
