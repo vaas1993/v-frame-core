@@ -103,6 +103,7 @@ export default class AppList {
      * @returns {Object}
      */
     getBodyConfig() {
+        this.showModel = this.showModel || this.searchModel
         let model = this.showModel
         return ObjectHelper.forEach(ObjectHelper.filter(this.bodyConfig, item => {
             return VFrame.getInstance().getHasPermission(item.permission)
