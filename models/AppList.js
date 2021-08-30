@@ -1,0 +1,127 @@
+import VFrame from "../VFrame"
+import ObjectHelper from "../helpers/ObjectHelper"
+
+export default class AppList {
+    /**
+     * 搜索模型实例
+     * 这个模型需要配置好搜索表单和ListApi
+     * 通过 list 方法读取到数据后将实例化成模型列表并赋值给 modelList
+     * @param {AppModel}
+     */
+    searchModel
+
+    /**
+     * 用于展示的表单模型实例列表
+     * @type {array<AppModel>}
+     */
+    modelList = []
+
+    /**
+     * 页面管理
+     * 用来存储目前的页码、总数 和 单页项数
+     * @type {{total: number, pagination: number, size: number}}
+     */
+    pager = {
+        pagination: 1,
+        size: 20,
+        total: 0
+    }
+
+    /**
+     * 是否展示搜索框
+     * @type {boolean}
+     */
+    isSearchShow = true
+
+    /**
+     * 是否展示导出按钮
+     * @type {boolean}
+     */
+    isExportShow = true
+
+    /**
+     * 是否展示分页器
+     * @type {boolean}
+     */
+    isPagerShow = true
+
+    /**
+     * 操作按钮列表
+     * @type {[{text: string, type: string}]}
+     */
+    actionList = [
+        {
+            text: '新建',
+            type: 'create'
+        },
+    ]
+
+    /**
+     * 列表展示字段的配置
+     * @type {object<object>}
+     */
+    bodyConfig = {}
+
+    /**
+     * 设置搜索模型的数据
+     * @param {object} sources
+     */
+    setSearchSources(sources = {}) {
+        if( this.searchModel ) {
+            this.searchModel.setSources(sources)
+        }
+    }
+
+    /**
+     * 获取一个用来取字段标签的模型实例
+     * 如果返回null，则使用 this.searchModel 取代
+     */
+    getModel() {
+        return null
+    }
+
+    /**
+     * 设置分页器
+     * 未设置的项将使用原有的值替代
+     * @param {object<total, pagination, size>} pager
+     */
+    setPager(pager) {
+        this.pager = Object.assign({}, this.pager, pager)
+    }
+
+    /**
+     * 获取操作按钮列表
+     * @returns {{text: string, type: string}[]}
+     */
+    getActionList() {
+        return this.actionList.filter(item => {
+            return VFrame.getInstance().getHasPermission(item.permission) && item.isShow !== false
+        })
+    }
+
+    /**
+     * 获取列表内容配置
+     * @returns {Object}
+     */
+    getBodyConfig() {
+        let model = this.getModel() || this.searchModel
+        return ObjectHelper.forEach(ObjectHelper.filter(this.bodyConfig, item => {
+            return VFrame.getInstance().getHasPermission(item.permission)
+        }), (item, field) => {
+            item.name = item.name ? item.name : model.getLabel(field)
+            return item
+        })
+    }
+
+    async onLoad(pagination, clearList = true) {
+        this.pager.pagination = pagination || this.pager.pagination++
+        if( clearList ) {
+            this.modelList = []
+        }
+        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size })) {
+            this.modelList = this.modelList.concat(this.searchModel.response.models)
+            this.setPager(this.searchModel.response.listMeta)
+        }
+        return true
+    }
+}
