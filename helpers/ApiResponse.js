@@ -1,7 +1,6 @@
 /**
  * 接口格式化后的数据类
  */
-import VFrame from "../VFrame";
 
 export default class ApiResponse {
     /**
@@ -17,10 +16,10 @@ export default class ApiResponse {
     static FAIL_TYPE = 'fail'
 
     /**
-     * 未知的接口分类
+     * 失败时的接口分类
      * @type {string}
      */
-    static UNKNOWN = 'unknown'
+    static ERROR_TYPE = 'error'
 
     /**
      * 通过接口规则解析的接口类型
@@ -101,6 +100,14 @@ export default class ApiResponse {
 
     getIsSuccess() {
         return ApiResponse.SUCCESS_TYPE === this.type
+    }
+
+    getIsFail() {
+        return ApiResponse.FAIL_TYPE === this.type
+    }
+
+    getIsError() {
+        return ApiResponse.ERROR_TYPE === this.type
     }
 
     getMessage() {
