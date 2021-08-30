@@ -242,10 +242,9 @@ export default class VFrame {
         this.dictList = list
     }
 
-    async install(app, reactive) {
+    async install() {
         await import('./styles/helper.css')
-        app.config.globalProperties.$vf = reactive(this)
-        this.constructor._instance = app.config.globalProperties.$vf
+        this.constructor._instance = this
         let config = (await import('@/configs/main')).default
         let user = new config.user.class()
         user.setSources(config.user.params || {})
@@ -254,5 +253,11 @@ export default class VFrame {
         this.setParams(params)
         this.setMainConfig(config)
         return this
+    }
+
+    async installForVue(app, reactive) {
+        await this.install()
+        app.config.globalProperties.$vf = reactive(this)
+        this.constructor._instance = app.config.globalProperties.$vf
     }
 }
