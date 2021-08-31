@@ -41,11 +41,13 @@ export default class ApiModel extends BaseModel {
     /**
      * 获取明细信息操作
      * 当获取成功时，将使用接口数据为当前实例对应属性赋值
+     * @param {object} params 请求参数
      * @returns {boolean}
      */
-    async detail() {
-        let params = {}
-        params[this.primaryKey] = this.getPrimary()
+    async detail(params = {}) {
+        if( this.getPrimary() ) {
+            params[this.primaryKey] = this.getPrimary()
+        }
         this.response = await Api.getInstance()
             .setApiName(this.constructor.DetailApi)
             .setGetParams(params)

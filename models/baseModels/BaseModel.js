@@ -45,6 +45,14 @@ export default class BaseModel {
     }
 
     /**
+     * 设置主键属性的值
+     * @param value
+     */
+    setPrimary(value) {
+        this[this.primaryKey] = value
+    }
+
+    /**
      * 获取指定属性是否必填
      * 需要在 rules 中配置属性必填
      * @param field
