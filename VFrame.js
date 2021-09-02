@@ -57,15 +57,6 @@ export default class VFrame {
     loading = 0
 
     /**
-     * 获取是否有权限
-     * @param {string} name 权限名
-     * @returns {boolean}
-     */
-    getHasPermission(name) {
-        return name === undefined || this.permissionList.indexOf(name) !== -1
-    }
-
-    /**
      * 添加loading状态
      */
     showLoading() {
@@ -78,15 +69,6 @@ export default class VFrame {
     hideLoading() {
         this.loading -= 1
         this.loading = this.loading < 0 ? 0 : this.loading
-    }
-
-    /**
-     * 在 params 中增加一个数据
-     * @param {string} name
-     * @param data
-     */
-    setParam(name, data) {
-        this.params[name] = data
     }
 
     /**
@@ -171,15 +153,6 @@ export default class VFrame {
     }
 
     /**
-     * 获取实例
-     * @returns {VFrame}
-     */
-    static getInstance() {
-        this._instance = this._instance || new this()
-        return this._instance
-    }
-
-    /**
      * 获取一个错误实例
      * @param {string} name
      * @param {string} message
@@ -213,6 +186,24 @@ export default class VFrame {
     }
 
     /**
+     * 在 params 中增加一个数据
+     * @param {string} name
+     * @param data
+     */
+    setParam(name, data) {
+        this.params[name] = data
+    }
+
+    /**
+     * 获取是否有权限
+     * @param {string} name 权限名
+     * @returns {boolean}
+     */
+    getHasPermission(name) {
+        return name === undefined || this.permissionList.indexOf(name) !== -1
+    }
+
+    /**
      * 设置用户实例
      * @param {AuthUser} user
      */
@@ -240,6 +231,15 @@ export default class VFrame {
      */
     setDictList(list) {
         this.dictList = list
+    }
+
+    /**
+     * 获取实例
+     * @returns {VFrame}
+     */
+    static getInstance() {
+        this._instance = this._instance || new this()
+        return this._instance
     }
 
     async install() {
