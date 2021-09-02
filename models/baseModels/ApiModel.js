@@ -10,28 +10,6 @@ export default class ApiModel extends BaseModel {
     response
 
     /**
-     * 删除操作对应的接口名
-     * 需要在 /config/apiConfigs 中配置
-     * @static
-     * @type {string}
-     */
-    static DeleteApi = undefined
-
-    /**
-     * 执行删除操作
-     * @returns {boolean}
-     */
-    async delete() {
-        let params = {}
-        params[this.primaryKey] = this.getPrimary()
-        this.response = await Api.getInstance()
-            .setApiName(this.constructor.DeleteApi)
-            .setGetParams(params)
-            .get()
-        return this.response.getIsSuccess()
-    }
-
-    /**
      * 详情信息对应的接口名
      * 需要在 /config/apiConfigs 中配置
      * @type {string}

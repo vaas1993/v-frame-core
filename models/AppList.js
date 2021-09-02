@@ -113,6 +113,12 @@ export default class AppList {
         })
     }
 
+    /**
+     * 列表搜索
+     * @param {int} pagination 指定页码，不传递时时候原页码+1
+     * @param {boolean} clearList 调用接口前是否要清空原列表内容，默认清空
+     * @returns {Promise<boolean>}
+     */
     async onLoad(pagination, clearList = true) {
         this.showModel = this.showModel || this.searchModel
 

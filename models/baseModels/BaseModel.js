@@ -1,3 +1,5 @@
+import ObjectHelper from "../../helpers/ObjectHelper";
+
 export default class BaseModel {
     /**
      * 校验规则配置
@@ -292,7 +294,7 @@ export default class BaseModel {
      */
     getInstanceTo(Model) {
         let model = new Model()
-        model.setSources(this.getSources())
+        model.setSources(ObjectHelper.copy(this.getSources()))
         return model
     }
 }

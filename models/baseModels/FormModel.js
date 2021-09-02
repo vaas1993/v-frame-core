@@ -2,13 +2,9 @@ import ApiModel from "./ApiModel"
 import VFrame from "../../VFrame"
 
 export default class FormModel extends ApiModel {
-    static ActionApi = 'user.login'
-
     /**
      * 获取一个用于渲染表单的配置
      * 对于不同的页面实现，可以有不同的格式
-     * 建议使用 JSONSchema 格式
-     * @see http://json-schema.org/
      * @return {object}
      */
     getFormConfig() {
@@ -103,14 +99,5 @@ export default class FormModel extends ApiModel {
             this[field] = {}
         }
         this[field] = null
-    }
-
-    /**
-     * 获取指定属性的说明文本
-     * @param {string} field
-     * @returns {null}
-     */
-    getDescription(field) {
-        return null
     }
 }
