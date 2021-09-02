@@ -49,4 +49,32 @@ export default class ObjectHelper {
         }
         return object
     }
+
+    /**
+     * 返回指定对象的深拷贝副本
+     * @param {object} object
+     */
+    static copy(object) {
+        let result
+        if (typeof object === 'object') {
+            if (Array.isArray(object)) {
+                result = []
+                for (let i in object) {
+                    result.push(this.copy(object[i]))
+                }
+            } else if (object === null) {
+                result = null
+            } else if (object.constructor === RegExp) {
+                result = object
+            } else {
+                result = {}
+                for (let i in object) {
+                    result[i] = this.copy(object[i])
+                }
+            }
+        } else {
+            result = object
+        }
+        return result
+    }
 }
