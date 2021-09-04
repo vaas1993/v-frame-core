@@ -1,5 +1,5 @@
 
-export default class StorageHelper {
+export default class CookieHelper {
     /**
      * 保存一个数据
      * @param {string} name 键名
@@ -7,13 +7,10 @@ export default class StorageHelper {
      * @param {int} expires 有效期，单位秒，小于等于0时代表不过期
      */
     static set(name, value, expires = 0) {
-        value = {
-            format: typeof value,
-            value,
-            timestamp: (new Date()).getTime(),
-            expires: expires > 0 ? expires * 1000 : undefined,
-        }
-        window.localStorage.setItem(name, JSON.stringify(value))
+        this.remove(name)
+        let date = new Date()
+        date.setTime( date.getTime() + ( expires * 1000 ) )
+        document.cookie = name + '=' + value + ';' + date.toUTCString()
     }
 
     /**
@@ -22,23 +19,14 @@ export default class StorageHelper {
      * @returns {string|object|null}
      */
     static get(name) {
-        let store = window.localStorage.getItem(name)
-
-        if( !store ) {
-            return null
-        }
-
-        store = JSON.parse(store)
-
-        if( store.expires !== undefined ) {
-            let currentTime = (new Date()).getTime()
-            if( currentTime > store.timestamp + store.expires ) {
-                this.remove(name)
-                return null
+        let values = document.cookie.split(';')
+        for (let str of values) {
+            str = str.split('=')
+            if( str[0] === name ) {
+                return str[1]
             }
         }
-
-        return store.value
+        return null
     }
 
     /**
@@ -56,13 +44,17 @@ export default class StorageHelper {
      * @param {string} name 键名
      */
     static remove(name) {
-        window.localStorage.removeItem(name)
+        this.set(name, '')
     }
 
     /**
-     * 清空整个本地存储
+     * 清空全部Cookie
      */
     static clear() {
-        window.localStorage.clear()
+        let values = document.cookie.split(';')
+        for (let str of values) {
+            str = str.split('=')
+            this.set(str[0], '')
+        }
     }
 }
