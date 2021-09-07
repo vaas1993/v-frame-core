@@ -99,5 +99,8 @@ export default class FormModel extends ApiModel {
             this[field] = {}
         }
         this[field] = null
+        if( this.fieldSuffix && this.getIsField(field + this.fieldSuffix) ) {
+            this[field + this.fieldSuffix] = this[field]
+        }
     }
 }
