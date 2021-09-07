@@ -2,7 +2,7 @@
   "name": "@vshen/v-frame-core",
   "version": "0.0.2",
   "description": "一个JS框架，用于快速的网页应用开发",
-  "main": "VFrame.js",
+  "main": "src/VFrame.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
