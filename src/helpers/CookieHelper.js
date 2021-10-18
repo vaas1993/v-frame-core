@@ -36,7 +36,7 @@ export default class CookieHelper {
      * @returns {boolean}
      */
     static has(name) {
-        return this.get(name) === null
+        return this.get(name) !== null
     }
 
     /**

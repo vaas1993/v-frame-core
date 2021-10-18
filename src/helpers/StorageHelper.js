@@ -48,7 +48,7 @@ export default class StorageHelper {
      * @returns {boolean}
      */
     static has(name) {
-        return this.get(name) === null
+        return this.get(name) !== null
     }
 
     /**

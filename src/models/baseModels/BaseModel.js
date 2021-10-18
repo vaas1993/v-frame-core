@@ -2,6 +2,13 @@ import ObjectHelper from "../../helpers/ObjectHelper";
 
 export default class BaseModel {
     /**
+     * 模型实例的唯一ID
+     * 注意，每一次实例化都会生成一次唯一值，每次都是不同的值
+     * @type {*}
+     */
+    $unique = undefined
+
+    /**
      * 校验规则配置
      * @type {object}
      */
@@ -37,6 +44,10 @@ export default class BaseModel {
      * @type {string}
      */
     fieldSuffix = '_view'
+
+    constructor() {
+        this.$unique = (((1+Math.random())*0x10000)|0).toString(16)
+    }
 
     /**
      * 获取主键属性的值
@@ -118,6 +129,15 @@ export default class BaseModel {
             }
         }
         return null
+    }
+
+    /**
+     * shiftErrorMessage的别名
+     * @param field
+     * @returns {string|null}
+     */
+    getOneErrorMessage(field = undefined) {
+        return this.shiftErrorMessage(field)
     }
 
     /**
@@ -246,6 +266,15 @@ export default class BaseModel {
     }
 
     /**
+     * 获取模型的属性值
+     * @param {string} field 对于属性是一个对象的，支持使用 . 号分隔符进行多级获取
+     * @returns {*}
+     */
+    getSource(field) {
+        return ObjectHelper.getValue(this, field)
+    }
+
+    /**
      * 传入一个属性名列表，返回属性对应的原始值
      * 不传属性名列表时，将返回所有属性对应的原始值
      * 使用该方法时注意与 getValues 方法的区别
@@ -257,7 +286,7 @@ export default class BaseModel {
         fields = fields.length ? fields : this.getFields()
         for (let field of fields) {
             if (this.getIsField(field)) {
-                values[field] = this[field]
+                values[field] = this.getSource(field)
             }
         }
         return values

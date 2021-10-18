@@ -1,6 +1,5 @@
 import vMain from "./configs/main"
 import vParams from "./configs/params"
-import AuthUser from "./models/AuthUser"
 
 export default class VFrame {
     static _instance
@@ -205,10 +204,10 @@ export default class VFrame {
 
     /**
      * 设置用户实例
-     * @param {AuthUser} user
+     * @param user
      */
     setUser(user) {
-        if( user instanceof AuthUser ) {
+        if( user ) {
             this.user = user
         } else {
             throw this.getError("设置用户实例错误", "请设置一个AuthUser的子类实例")
@@ -243,19 +242,21 @@ export default class VFrame {
     }
 
     async install() {
-        await import('./styles/helper.css')
         this.constructor._instance = this
-        let config = (await import('@/configs/main')).default
+        let config = {}
+        let params = {}
+
+        config = (await import('@/configs/main')).default
+        params = (await import('@/configs/params')).default
         let user = new config.user.class()
         user.setSources(config.user.params || {})
         this.setUser(user)
-        let params = (await import('@/configs/params')).default
         this.setParams(params)
         this.setMainConfig(config)
         return this
     }
 
-    async installForVue(app, reactive) {
+    async vue(app, reactive) {
         await this.install()
         app.config.globalProperties.$vf = reactive(this)
         this.constructor._instance = app.config.globalProperties.$vf

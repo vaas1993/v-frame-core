@@ -1,7 +1,7 @@
-import AppModel from "./AppModel";
-import StorageHelper from "../helpers/StorageHelper";
-import ObjectHelper from "../helpers/ObjectHelper";
-import VFrame from "../VFrame";
+import AppModel from "./AppModel"
+import StorageHelper from "../helpers/StorageHelper"
+import ObjectHelper from "../helpers/ObjectHelper"
+import VFrame from "../VFrame"
 export default class AuthUser extends AppModel {
     static ACCESS_TOKEN_NAME = 'ACCESS_TOKEN_NAME'
     accessToken
