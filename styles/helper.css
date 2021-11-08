@@ -560,6 +560,14 @@
     float: right;
 }
 
+.width-unset {
+    width: unset;
+}
+
+.height-unset {
+    height: unset;
+}
+
 .width-10 {
     width: 10%;
 }
@@ -621,12 +629,17 @@
     text-align: right;
 }
 
-.flex {
-    display: flex;
+.text-justify {
+    text-align: justify;
 }
 
-.flex-1 {
-    flex: 1;
+.flex {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.flex-item {
+    flex: 1 1 auto;
 }
 
 .hidden {
