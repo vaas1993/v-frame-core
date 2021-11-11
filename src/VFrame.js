@@ -76,12 +76,13 @@ export default class VFrame {
      */
     showModal(options) {
         this.modal = Object.assign({
-            id: Math.random(),
             callback: undefined,
             showClose: true,
             title: undefined,
-            component: undefined
-        }, options)
+            content: undefined
+        }, options, {
+            id: Math.random(),
+        })
     }
 
     /**
