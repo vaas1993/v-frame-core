@@ -60,10 +60,17 @@ export default class Api {
     initConfigs() {
         let vf = VFrame.getInstance()
         let mainConfig = vf.mainConfig
+
+        if( mainConfig.api === undefined ) {
+            console.error('请在配置文件中设置 api 字段')
+        }
+
         this.apiList = mainConfig.api.list
         this.apiFilter = mainConfig.api.filter
         this.driver = mainConfig.api.driver
-        this.headers = Object.assign(this.headers, mainConfig.api.defaultHeaders(vf))
+        if( typeof mainConfig.api.defaultHeaders === 'function' ) {
+            this.headers = Object.assign(this.headers, mainConfig.api.defaultHeaders(vf))
+        }
     }
 
     /**
