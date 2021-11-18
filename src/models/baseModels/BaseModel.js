@@ -226,6 +226,7 @@ export default class BaseModel {
             'rules',
             'fieldLabels',
             'response',
+            '$unique',
         ].indexOf(field) === -1 && (
             Object.prototype.hasOwnProperty.call(this, field)
             || this.formatConfig[field]

@@ -6,6 +6,10 @@ export default class AuthUser extends AppModel {
     static ACCESS_TOKEN_NAME = 'ACCESS_TOKEN_NAME'
     accessToken
 
+    getIsField(field) {
+        return super.getIsField(field) && field !== 'accessToken'
+    }
+
     /**
      * 设置授权令牌
      * 当设置为undefined时会清空Token
