@@ -70,6 +70,14 @@ export default class AppList {
     bodyConfig = {}
 
     /**
+     * 获取分页数
+     * @returns {number}
+     */
+    getPageCount() {
+        return Math.ceil( this.pager.total / this.pager.size )
+    }
+
+    /**
      * 设置搜索模型的数据
      * @param {object} sources
      */
