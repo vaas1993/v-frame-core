@@ -70,6 +70,17 @@ export default class AppList {
     bodyConfig = {}
 
     /**
+     * 获取用于展示的模型实例
+     * @returns {*}
+     */
+    getShowModel() {
+        if( !this.showModel ) {
+            this.showModel = this.searchModel
+        }
+        return this.showModel
+    }
+
+    /**
      * 获取分页数
      * @returns {number}
      */
@@ -111,8 +122,7 @@ export default class AppList {
      * @returns {Object}
      */
     getBodyConfig() {
-        this.showModel = this.showModel || this.searchModel
-        let model = this.showModel
+        let model = this.getShowModel()
         return ObjectHelper.forEach(ObjectHelper.filter(this.bodyConfig, item => {
             return VFrame.getInstance().getHasPermission(item.permission)
         }), (item, field) => {
@@ -128,13 +138,11 @@ export default class AppList {
      * @returns {Promise<boolean>}
      */
     async onLoad(pagination, clearList = true) {
-        this.showModel = this.showModel || this.searchModel
-
         this.pager.pagination = pagination || this.pager.pagination++
         if( clearList ) {
             this.modelList = []
         }
-        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.showModel.constructor)) {
+        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.getShowModel().constructor)) {
             this.modelList = this.modelList.concat(this.searchModel.response.models)
             this.setPager(this.searchModel.response.listMeta)
         }
