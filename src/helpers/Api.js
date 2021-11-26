@@ -33,7 +33,7 @@ export default class Api {
 
     /**
      * 配置信息
-     * @type {{}}
+     * @type {object}
      */
     apiList = {}
 
@@ -55,7 +55,6 @@ export default class Api {
 
     /**
      * 初始化配置
-     * 需要在子类中实现
      */
     initConfigs() {
         let vf = VFrame.getInstance()
@@ -141,6 +140,7 @@ export default class Api {
 
     /**
      * 获取请求接口配置信息
+     * @returns {object}
      */
     getApiList() {
         if (!this.apiName) {
@@ -219,7 +219,7 @@ export default class Api {
 
     /**
      * 执行请求发起的操作
-     * @param method
+     * @param {string} method 方法名
      * @returns {Promise<ApiResponse>|ApiResponse}
      */
     async send(method) {

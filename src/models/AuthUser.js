@@ -6,6 +6,11 @@ export default class AuthUser extends AppModel {
     static ACCESS_TOKEN_NAME = 'ACCESS_TOKEN_NAME'
     accessToken
 
+    /**
+     * 获取某个变量是不是属姓
+     * @param field
+     * @returns {boolean}
+     */
     getIsField(field) {
         return super.getIsField(field) && field !== 'accessToken'
     }
@@ -42,6 +47,7 @@ export default class AuthUser extends AppModel {
 
     /**
      * 登录成功后的回调
+     * @returns {Promise<boolean>}
      */
     afterLogin() {
         return new Promise(next => {

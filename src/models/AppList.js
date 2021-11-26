@@ -6,7 +6,7 @@ export default class AppList {
      * 搜索模型实例
      * 这个模型需要配置好搜索表单和ListApi
      * 通过 list 方法读取到数据后将实例化成模型列表并赋值给 modelList
-     * @param {AppModel}
+     * @type {AppModel}
      */
     searchModel
 
@@ -14,6 +14,7 @@ export default class AppList {
      * 展示模型实例
      * 用于列表中展示时获取 label 或者其他格式化配置
      * 不配置时会使用 searchModel 覆盖
+     * @type {AppModel}
      */
     showModel
 
@@ -26,7 +27,7 @@ export default class AppList {
     /**
      * 页面管理
      * 用来存储目前的页码、总数 和 单页项数
-     * @type {{total: number, pagination: number, size: number}}
+     * @type {object<pagination, size, total>}
      */
     pager = {
         pagination: 1,
@@ -54,11 +55,11 @@ export default class AppList {
 
     /**
      * 操作按钮列表
-     * @type {[{text: string, type: string}]}
+     * @type {array<object<name, type>>}
      */
     actionList = [
         {
-            text: '新建',
+            name: '新建',
             type: 'create'
         },
     ]
@@ -71,7 +72,7 @@ export default class AppList {
 
     /**
      * 获取用于展示的模型实例
-     * @returns {*}
+     * @returns {AppModel}
      */
     getShowModel() {
         if( !this.showModel ) {
@@ -109,7 +110,7 @@ export default class AppList {
 
     /**
      * 获取操作按钮列表
-     * @returns {{text: string, type: string}[]}
+     * @returns {array<object<name, type>>}
      */
     getActionList() {
         return this.actionList.filter(item => {
@@ -119,7 +120,7 @@ export default class AppList {
 
     /**
      * 获取列表内容配置
-     * @returns {Object}
+     * @returns {object}
      */
     getBodyConfig() {
         let model = this.getShowModel()

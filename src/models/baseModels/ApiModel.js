@@ -46,7 +46,7 @@ export default class ApiModel extends BaseModel {
 
     /**
      * 获取list接口需要用的URL参数
-     * @returns {{}}
+     * @returns {object}
      */
     getListQueryParams() {
         return this.getSources()
@@ -56,7 +56,7 @@ export default class ApiModel extends BaseModel {
      * 传入参数，根据参数获取列表信息
      * 当获取成功时，将使用接口数据实例化一个模型列表，可使用 response.getModels() 获取
      * @static
-     * @returns {Promise<ApiResponse>|ApiResponse}
+     * @returns {Promise<boolean>}
      */
     async list(params = {}, model) {
         params = Object.assign(params, this.getListQueryParams())
@@ -74,8 +74,8 @@ export default class ApiModel extends BaseModel {
 
     /**
      * 根据一个数据列表，实例化一个模型列表
-     * @param list
-     * @returns {*}
+     * @param {array<object>} list
+     * @returns {array}
      */
     static instanceList(list) {
         return list.map(data => {
@@ -107,7 +107,7 @@ export default class ApiModel extends BaseModel {
 
     /**
      * 获取action接口需要使用的URL参数
-     * @returns {{id: *}}
+     * @returns {object}
      */
     getActionQueryParams() {
         let params = {}

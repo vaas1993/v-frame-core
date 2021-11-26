@@ -3,8 +3,8 @@ import ObjectHelper from "../../helpers/ObjectHelper";
 export default class BaseModel {
     /**
      * 模型实例的唯一ID
-     * 注意，每一次实例化都会生成一次唯一值，每次都是不同的值
-     * @type {*}
+     * 注意，每一次实例化都会生成一次唯一值，每次都是不同的值，尽管是同一组数据重复实例化也会得到两个不同的唯一ID
+     * @type {string}
      */
     $unique = undefined
 
@@ -16,7 +16,7 @@ export default class BaseModel {
 
     /**
      * 错误信息
-     * @type {[]}
+     * @type {array<object<field, message>>}
      */
     errors = []
 
@@ -46,12 +46,12 @@ export default class BaseModel {
     fieldSuffix = '_view'
 
     constructor() {
-        this.$unique = (((1+Math.random())*0x10000)|0).toString(16)
+        this.$unique = (((1+Math.random())*0x1000000)|0).toString(16)
     }
 
     /**
      * 获取主键属性的值
-     * @returns {*}
+     * @returns {string}
      */
     getPrimary() {
         return this[this.primaryKey]
@@ -59,7 +59,7 @@ export default class BaseModel {
 
     /**
      * 设置主键属性的值
-     * @param value
+     * @param {string} value
      */
     setPrimary(value) {
         this[this.primaryKey] = value
@@ -68,7 +68,7 @@ export default class BaseModel {
     /**
      * 获取指定属性是否必填
      * 需要在 rules 中配置属性必填
-     * @param field
+     * @param {string} field
      * @returns {boolean}
      */
     getIsRequired(field) {
@@ -133,7 +133,7 @@ export default class BaseModel {
 
     /**
      * shiftErrorMessage的别名
-     * @param field
+     * @param {string} field
      * @returns {string|null}
      */
     getOneErrorMessage(field = undefined) {
@@ -179,7 +179,7 @@ export default class BaseModel {
      * 5. 如果 formatConfig 配置了 formatter，则实例化格式器，并获取格式器处理后的值
      * 6. 返回最后获取到的值
      * @param {string} field 属性名
-     * @param {*} source 指定一个特定的值进行格式化，该值指定后，不会修改实例对应属性的值
+     * @param {*} source 指定一个特定的值进行格式化，该值指定后，返回的展示值会使用这个值作为原始值进行处理，但不会修改实例对应属性的值
      * @returns {*}
      */
     getValue(field, source = undefined) {
@@ -280,7 +280,7 @@ export default class BaseModel {
      * 不传属性名列表时，将返回所有属性对应的原始值
      * 使用该方法时注意与 getValues 方法的区别
      * @param {array<string>} fields
-     * @returns {{}}
+     * @returns {object}
      */
     getSources(fields = []) {
         let values = {}
@@ -299,8 +299,17 @@ export default class BaseModel {
      */
     setSources(sources) {
         for (let field in sources) {
-            this[field] = sources[field]
+            this.setSource(field, sources[field])
         }
+    }
+
+    /**
+     * 设置属性对应的原始值
+     * @param {string} field
+     * @param {*} value
+     */
+    setSource(field, value) {
+        this[field] = value
     }
 
     /**
@@ -319,11 +328,11 @@ export default class BaseModel {
 
     /**
      * 传入一个类，将当前实例的数据通过 setSources 转移到另一个类实例中
-     * @param {function} Model
+     * @param {function} ModelClass
      * @returns {BaseModel}
      */
-    getInstanceTo(Model) {
-        let model = new Model()
+    getInstanceTo(ModelClass) {
+        let model = new ModelClass()
         model.setSources(ObjectHelper.copy(this.getSources()))
         return model
     }

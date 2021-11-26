@@ -74,7 +74,7 @@ export default class ApiResponse {
 
     /**
      * 列表元数据
-     * @type {{}}
+     * @type {object}
      */
     listMeta = {}
 

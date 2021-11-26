@@ -188,7 +188,7 @@ export default class VFrame {
     /**
      * 在 params 中增加一个数据
      * @param {string} name
-     * @param data
+     * @param {object|array} data
      */
     setParam(name, data) {
         this.params[name] = data
@@ -205,7 +205,7 @@ export default class VFrame {
 
     /**
      * 设置用户实例
-     * @param user
+     * @param {AuthUser} user
      */
     setUser(user) {
         if( user ) {
@@ -242,6 +242,10 @@ export default class VFrame {
         return this._instance
     }
 
+    /**
+     * 安装初始化，在使用VFrame之前需要先调用这个方法进行必要的初始化
+     * @returns {Promise<VFrame>}
+     */
     async install() {
         this.constructor._instance = this
         let config = {}
@@ -257,9 +261,16 @@ export default class VFrame {
         return this
     }
 
+    /**
+     * 针对VUE进行封装的初始化方法，暴露有个全局的 $vf 当VUE上下文中
+     * @param {object} app VUE应用实例
+     * @param {function} reactive VUE用于将普通变量转为可监听的变量
+     * @returns {Promise<VFrame>}
+     */
     async vue(app, reactive) {
         await this.install()
-        app.config.globalProperties.$vf = reactive(this)
+        app.config.globalProperties.$vf = typeof reactive === 'function' ? reactive(this) : this
         this.constructor._instance = app.config.globalProperties.$vf
+        return this
     }
 }

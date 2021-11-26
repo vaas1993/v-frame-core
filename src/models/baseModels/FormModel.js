@@ -14,12 +14,12 @@ export default class FormModel extends ApiModel {
     /**
      * 获取一个用于渲染表单操作按钮的配置
      * 按钮可以配置一个 type 字段，最终点击这个按钮的时候会自动调用模型的 onForm + Type 的方法，比如 onFormCancel() 代表了 type = cancel
-     * @returns {({options: {type: string, class: string}, text: string, type: string}|{options: {type: string, class: string}, text: string, type: string})[]}
+     * @returns {array<object<name,type,submit,options>>}
      */
     getFormActionList() {
         return [
             {
-                text: '取消',
+                name: '取消',
                 type: 'cancel',
                 submit: false,
                 options: {
@@ -29,7 +29,7 @@ export default class FormModel extends ApiModel {
                 }
             },
             {
-                text: '确认',
+                name: '确认',
                 type: 'submit',
                 submit: true,
                 options: {
@@ -60,7 +60,7 @@ export default class FormModel extends ApiModel {
 
     /**
      * 获取表单配置中的字段列表
-     * @returns {string[]}
+     * @returns {array<string>}
      */
     getFormFields() {
         return Object.keys(this.getFormConfig())
