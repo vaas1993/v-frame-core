@@ -53,7 +53,37 @@ export default class VFrame {
         content: undefined
     }
 
+    globalData = {}
+
     loading = 0
+
+    constructor() {
+        // 单例
+        if( typeof VFrame._instance === 'object' ) {
+            return VFrame._instance
+        }
+        return this
+    }
+
+    /**
+     * 设置全局变量
+     * @param {string} path 全局变量路径，可以用英文逗号.隔开
+     * @param {any} value 需要赋予的值，允许任何类型
+     */
+    setGlobalData(path, value) {
+        path = path.split('.')
+        if( path.length ) {
+            let item = this.globalData
+            let lastKey = path.pop()
+            for (let key of path) {
+                if( typeof item[key] !== 'object' ) {
+                    item[key] = {}
+                }
+                item = item[key]
+            }
+            item[lastKey] = value
+        }
+    }
 
     /**
      * 添加loading状态
