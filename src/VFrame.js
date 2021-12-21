@@ -4,6 +4,10 @@ import vParams from "./configs/params"
 export default class VFrame {
     static _instance
 
+    /**
+     * 主配置
+     * @type {{name, api: {defaultHeaders, list, filter, driver}}}
+     */
     mainConfig = {}
 
     params = {}

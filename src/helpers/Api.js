@@ -62,13 +62,17 @@ export default class Api {
 
         if( mainConfig.api === undefined ) {
             console.error('请在配置文件中设置 api 字段')
+            return
         }
 
-        this.apiList = mainConfig.api.list
-        this.apiFilter = mainConfig.api.filter
-        this.driver = mainConfig.api.driver
-        if( typeof mainConfig.api.defaultHeaders === 'function' ) {
-            this.headers = Object.assign(this.headers, mainConfig.api.defaultHeaders(vf))
+        let apiConfig = mainConfig.api
+
+        this.apiList = apiConfig.list
+        this.apiFilter = apiConfig.filter
+        this.driver = apiConfig.driver
+
+        if( typeof apiConfig.defaultHeaders === 'function' ) {
+            this.headers = Object.assign(this.headers, apiConfig.defaultHeaders(vf))
         }
     }
 
@@ -226,6 +230,11 @@ export default class Api {
         let config = this.getApiList()
         let response = {}
         try {
+            this.onBeforeSend({
+                getParams: this.getParams,
+                postParams: this.postParams,
+                headers: this.getHeaders()
+            })
             response = await this.driver({
                 url: config.url,
                 method,
@@ -242,6 +251,21 @@ export default class Api {
                 data: {}
             }
         }
-        return this.formatResponse(config, response)
+        response = this.formatResponse(config, response)
+        this.onAfterSend(response)
+        return response
+    }
+
+    onBeforeSend(request) {
+        let apiConfig = VFrame.getInstance().mainConfig.api
+        if(apiConfig.onBeforeSend === 'function') {
+            apiConfig.onBeforeSend(this, request)
+        }
+    }
+    onAfterSend(response) {
+        let apiConfig = VFrame.getInstance().mainConfig.api
+        if(apiConfig.onAfterSend === 'function') {
+            apiConfig.onAfterSend(this, response)
+        }
     }
 }
