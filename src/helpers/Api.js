@@ -258,13 +258,13 @@ export default class Api {
 
     onBeforeSend(request) {
         let apiConfig = VFrame.getInstance().mainConfig.api
-        if(apiConfig.onBeforeSend === 'function') {
+        if(typeof apiConfig.onBeforeSend === 'function') {
             apiConfig.onBeforeSend(this, request)
         }
     }
     onAfterSend(response) {
         let apiConfig = VFrame.getInstance().mainConfig.api
-        if(apiConfig.onAfterSend === 'function') {
+        if(typeof apiConfig.onAfterSend === 'function') {
             apiConfig.onAfterSend(this, response)
         }
     }
