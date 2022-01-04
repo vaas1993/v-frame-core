@@ -11,7 +11,7 @@ export default class ObjectHelper {
      * @returns {undefined}
      */
     static getValue(object, key, defaultValue = undefined) {
-        if( typeof object !== 'object' ) {
+        if( typeof object !== 'object' || object === null ) {
             return defaultValue
         }
         let items = key.split('.')
