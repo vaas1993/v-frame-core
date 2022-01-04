@@ -16,6 +16,13 @@ export default class AuthUser extends AppModel {
     }
 
     /**
+     * 从存储器中加载授权令牌
+     */
+    loadAccessToken() {
+        this.setAccessToken(StorageHelper.get(AuthUser.ACCESS_TOKEN_NAME) || undefined)
+    }
+
+    /**
      * 设置授权令牌
      * 当设置为undefined时会清空Token
      * @param {string|undefined} token
