@@ -11,6 +11,9 @@ export default class ObjectHelper {
      * @returns {undefined}
      */
     static getValue(object, key, defaultValue = undefined) {
+        if( typeof object !== 'object' ) {
+            return defaultValue
+        }
         let items = key.split('.')
         let temp = object
         for(let name of items) {
