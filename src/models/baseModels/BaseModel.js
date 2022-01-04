@@ -45,8 +45,12 @@ export default class BaseModel {
      */
     fieldSuffix = '_view'
 
-    constructor() {
+    constructor(sources = {}) {
         this.$unique = (((1+Math.random())*0x1000000)|0).toString(16)
+
+        if( typeof sources === 'object' ) {
+            this.setSources(sources)
+        }
     }
 
     /**
@@ -198,8 +202,8 @@ export default class BaseModel {
             })
         }
         // 后缀翻译
-        else if (this[field + '_view']) {
-            source = this[field + '_view']
+        else if (this[field + this.fieldSuffix]) {
+            source = this[field + this.fieldSuffix]
         }
         // 助手翻译
         if (format.formatter) {
