@@ -18,7 +18,7 @@ export default class ObjectHelper {
         let temp = object
         for(let name of items) {
             temp = temp[name]
-            if(typeof temp !== 'object') {
+            if(typeof temp !== 'object' || temp === null) {
                 break
             }
         }
