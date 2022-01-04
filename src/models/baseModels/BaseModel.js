@@ -235,7 +235,7 @@ export default class BaseModel {
             Object.prototype.hasOwnProperty.call(this, field)
             || this.formatConfig[field]
             || this.fieldLabels[field]
-        ) && (field.indexOf(this.fieldSuffix) === -1 && this.getIsField(field.replace(this.fieldSuffix, '')))
+        ) && (field.indexOf(this.fieldSuffix) === -1 || this.getIsField(field.replace(this.fieldSuffix, '')))
     }
 
     /**

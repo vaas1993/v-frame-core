@@ -185,7 +185,7 @@ export default class ApiModel extends BaseModel {
             await validator.validate(this.getSources(fields))
             return true
         } catch ({errors}) {
-            errors.map(({message, field}) => {
+            (errors || []).map(({message, field}) => {
                 this.addError(field, message.replace(field, this.getLabel(field)))
             })
             return false
