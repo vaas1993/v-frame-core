@@ -1,7 +1,7 @@
-import BaseModel from "./BaseModel";
-import Api from "../../helpers/Api";
-import ObjectHelper from "../../helpers/ObjectHelper";
-import Schema from "async-validator";
+import BaseModel from "./BaseModel"
+import ObjectHelper from "../../helpers/ObjectHelper"
+import Schema from "async-validator"
+import VFrame from "../../VFrame"
 
 export default class ApiModel extends BaseModel {
     /**
@@ -26,7 +26,7 @@ export default class ApiModel extends BaseModel {
         if( this.getPrimary() ) {
             params[this.primaryKey] = this.getPrimary()
         }
-        this.response = await Api.getInstance()
+        this.response = await VFrame.getInstance().get('api').getInstance()
             .setApiName(this.constructor.DetailApi)
             .setGetParams(params)
             .get()
@@ -60,7 +60,7 @@ export default class ApiModel extends BaseModel {
      */
     async list(params = {}, model) {
         params = Object.assign(params, this.getListQueryParams())
-        this.response = await Api.getInstance()
+        this.response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(params)
             .setApiName(this.constructor.ListApi)
             .get()
@@ -175,7 +175,7 @@ export default class ApiModel extends BaseModel {
                 mismatch: '%s 格式是错误的'
             },
             clone: function clone() {
-                var cloned = JSON.parse(JSON.stringify(this));
+                let cloned = JSON.parse(JSON.stringify(this));
                 cloned.clone = this.clone;
                 return cloned;
             }
@@ -216,7 +216,7 @@ export default class ApiModel extends BaseModel {
             return false
         }
 
-        this.response = await Api.getInstance()
+        this.response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(this.getActionQueryParams())
             .setPostParams(this.getActionRequestParams())
             .setApiName(this.constructor.ActionApi)

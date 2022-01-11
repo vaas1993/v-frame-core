@@ -307,4 +307,15 @@ export default class VFrame {
         this.constructor._instance = app.config.globalProperties.$vf
         return this
     }
+
+    /**
+     * 获取主配置文件中指定组件的class
+     * 比如要获取Api，不需要手动调用Api类，而是 VFrame.getInstance().get('api') 即可
+     * 这样子方便二次开发时自定义 Api 类
+     * @param {string} name
+     * @returns {string|*}
+     */
+    get(name) {
+        return this.mainConfig[name].class
+    }
 }
