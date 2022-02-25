@@ -22,7 +22,7 @@ export default class ObjectHelper {
                 break
             }
         }
-        return temp || defaultValue
+        return ['', null, undefined].indexOf(temp) === -1 ? temp : defaultValue
     }
 
     /**
