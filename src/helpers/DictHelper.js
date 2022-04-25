@@ -22,7 +22,7 @@ export default class DictHelper extends AppModel {
      * @returns {string}
      */
     static getValue(groupName, name) {
-        name = name || ''
+        name = [null, undefined].indexOf(name) === -1 ? name : ''
         let group = this.getGroup(groupName)
         for (let dict of group) {
             if( dict.name === name ) {
@@ -38,7 +38,7 @@ export default class DictHelper extends AppModel {
      * @returns {string}
      */
     static getName(groupName, value) {
-        value = value || ''
+        value = [null, undefined].indexOf(value) === -1 ? value : ''
         let group = this.getGroup(groupName)
         for (let dict of group) {
             if( dict.value.toString() === value.toString() ) {
