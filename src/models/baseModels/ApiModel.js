@@ -100,7 +100,7 @@ export default class ApiModel extends BaseModel {
         let formConfig = this.getFormConfig()
         let result = {}
         ObjectHelper.forEach(formConfig, (value, key) => {
-            result[key] = this[key] || undefined
+            result[key] = this[key] || null
         })
         return result
     }
