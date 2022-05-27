@@ -393,4 +393,14 @@ export default class BaseModel {
         })
     }
 
+    /**
+     * 清空某个事件
+     * @param {string} eventName 事件名称
+     */
+    $clear(eventName) {
+        if( this.$events[eventName] ) {
+            delete this.$events[eventName]
+        }
+    }
+
 }
