@@ -1,6 +1,6 @@
 {
   "name": "@vshen/v-frame-core",
-  "version": "0.2.23",
+  "version": "0.2.24",
   "description": "一个JS框架，用于快速的网页应用开发",
   "main": "src/VFrame.js",
   "scripts": {

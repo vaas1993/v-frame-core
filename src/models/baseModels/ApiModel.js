@@ -127,7 +127,17 @@ export default class ApiModel extends BaseModel {
         isClearErrors ? this.clearErrors() : ''
         Schema.warning = () => {
         }
-        let validator = new Schema(this.rules)
+        let rules = this.rules
+        // 根据fields，过滤掉不需要校验的字段
+        if( fields.length !== 0 ) {
+            for (let field in rules) {
+                if( fields.indexOf(field) === -1 ) {
+                    delete rules[field]
+                }
+            }
+        }
+
+        let validator = new Schema(rules)
         let messages = {
             default: '验证错误 %s',
             required: '%s 不能为空',
