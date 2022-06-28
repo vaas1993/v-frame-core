@@ -212,9 +212,10 @@ export default class ApiModel extends BaseModel {
      * 当调用不成功并且ApiResponse可以解析出 field 时，会自动将错误信息通过 addError 写入当前模型
      * @param {boolean} runValidator 调用接口前是否先调用数据校验，当校验不通过时该方法将返回 null
      * @param {boolean} isClearErrors 是否需要在调用数据校验前，清空错误信息
+     * @param {string} method 请求方式，可以是 post 和 raw，默认是raw
      * @returns {boolean}
      */
-    async action(runValidator = true, isClearErrors = true) {
+    async action(runValidator = true, isClearErrors = true, method = 'raw') {
         if( isClearErrors ) {
             this.clearErrors()
         }
@@ -229,8 +230,7 @@ export default class ApiModel extends BaseModel {
         this.response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(this.getActionQueryParams())
             .setPostParams(this.getActionRequestParams())
-            .setApiName(this.constructor.ActionApi)
-            .raw()
+            .setApiName(this.constructor.ActionApi)[method.toLowerCase()]
         if (this.response.getIsSuccess()) {
             this.setSources(this.response.getSources())
         } else {
