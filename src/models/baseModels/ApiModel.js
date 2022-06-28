@@ -230,7 +230,7 @@ export default class ApiModel extends BaseModel {
         this.response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(this.getActionQueryParams())
             .setPostParams(this.getActionRequestParams())
-            .setApiName(this.constructor.ActionApi)[method.toLowerCase()]
+            .setApiName(this.constructor.ActionApi)[method.toLowerCase()]()
         if (this.response.getIsSuccess()) {
             this.setSources(this.response.getSources())
         } else {
