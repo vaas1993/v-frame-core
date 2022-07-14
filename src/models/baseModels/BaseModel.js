@@ -1,6 +1,7 @@
 import ObjectHelper from "../../helpers/ObjectHelper";
+import EventHandler from "../../helpers/EventHandler";
 
-export default class BaseModel {
+export default class BaseModel extends EventHandler{
     /**
      * 模型实例的唯一ID
      * 注意，每一次实例化都会生成一次唯一值，每次都是不同的值，尽管是同一组数据重复实例化也会得到两个不同的唯一ID
@@ -46,6 +47,7 @@ export default class BaseModel {
     fieldSuffix = '_view'
 
     constructor(sources = {}) {
+        super()
         this.$unique = (((1+Math.random())*0x1000000)|0).toString(16)
 
         if( typeof sources === 'object' ) {
@@ -345,62 +347,4 @@ export default class BaseModel {
         model.setSources(ObjectHelper.copy(this.getSources()))
         return model
     }
-
-    /**
-     * 监听中的事件列表
-     * @type {object<array>}
-     */
-    $events = {}
-
-    /**
-     * 添加事件监听器
-     * @param {string} eventName 事件名称
-     * @param {function} callback 事件处理函数
-     * @param {boolean} once 是否只响应一次
-     */
-    $on(eventName, callback, once = false) {
-        this.$events[eventName] = this.$events[eventName] || []
-        this.$events[eventName].push({
-            once,
-            callback
-        })
-    }
-
-    /**
-     * 移除某个事件
-     * @param {string} eventName 事件名称
-     * @param {function} callback 事件处理函数
-     */
-    $off(eventName, callback) {
-        let list = (this.$events[eventName] || []).map(item => item.callback)
-        let index = list.indexOf(callback)
-        if( index !== -1 ) {
-            this.$events[eventName].splice(index, 1)
-        }
-    }
-
-    /**
-     * 触发事件
-     * @param {string} eventName 事件名称
-     * @param {*} params 事件参数
-     */
-    $emit(eventName, params) {
-        (this.$events[eventName] || []).map(item => {
-            item.callback(params)
-            if( item.once ) {
-                this.$off(eventName, item.callback)
-            }
-        })
-    }
-
-    /**
-     * 清空某个事件
-     * @param {string} eventName 事件名称
-     */
-    $clear(eventName) {
-        if( this.$events[eventName] ) {
-            delete this.$events[eventName]
-        }
-    }
-
 }
