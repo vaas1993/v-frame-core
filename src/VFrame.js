@@ -287,9 +287,11 @@ export default class VFrame {
 
         config = (await import('@/configs/main')).default
         params = (await import('@/configs/params')).default
-        let user = new config.user.class()
-        user.setSources(config.user.params || {})
-        this.setUser(user)
+        if( config.user && config.user.class ) {
+            let user = new config.user.class()
+            user.setSources(config.user.params || {})
+            this.setUser(user)
+        }
         this.setParams(params)
         this.setMainConfig(config)
         return this
