@@ -73,6 +73,10 @@ export default class FormModel extends ApiModel {
      * @returns {boolean}
      */
     getIsEmpty(field) {
+        if( this.getValue(field) ) {
+            return true
+        }
+
         let value = this.getSource(field)
         if (Array.isArray(value)) {
             return value.length === 0
