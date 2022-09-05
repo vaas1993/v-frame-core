@@ -73,17 +73,18 @@ export default class FormModel extends ApiModel {
      * @returns {boolean}
      */
     getIsEmpty(field) {
-        if( !this.getValue(field) ) {
-            return true
+        let value = this.getSource(field)
+        if( this.formatConfig[field] === undefined ) {
+            if (Array.isArray(value)) {
+                return value.length === 0
+            }
+            if (typeof value === 'object' && value) {
+                return Object.keys(value).length === 0
+            }
+        } else {
+            value = this.getValue(field)
         }
 
-        let value = this.getSource(field)
-        if (Array.isArray(value)) {
-            return value.length === 0
-        }
-        if (typeof value === 'object' && value) {
-            return Object.keys(value).length === 0
-        }
         return ['', null, undefined].indexOf(value) !== -1
     }
 
