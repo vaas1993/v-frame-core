@@ -73,7 +73,7 @@ export default class FormModel extends ApiModel {
      * @returns {boolean}
      */
     getIsEmpty(field) {
-        if( this.getValue(field) ) {
+        if( !this.getValue(field) ) {
             return true
         }
 
