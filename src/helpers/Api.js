@@ -170,7 +170,7 @@ export default class Api {
      */
     formatResponse(config, response) {
         // 如果接口配置没有指定 filter 规则，则使用全局默认
-        let filters = config.filter || this.apiFilter || {}
+        let filters = config.filter || this.apiFilter || []
         let result = undefined
 
         for ( let item of filters ) {
