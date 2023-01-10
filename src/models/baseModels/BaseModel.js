@@ -1,5 +1,6 @@
 import ObjectHelper from "../../helpers/ObjectHelper";
 import EventHandler from "../../helpers/EventHandler";
+import VFrame from "../../VFrame";
 
 export default class BaseModel extends EventHandler{
     /**
@@ -8,6 +9,12 @@ export default class BaseModel extends EventHandler{
      * @type {string}
      */
     $unique = undefined
+
+    /**
+     * VFrame实例
+     * @type {VFrame}
+     */
+    $vf = VFrame.getInstance()
 
     /**
      * 校验规则配置
