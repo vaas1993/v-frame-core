@@ -1,6 +1,6 @@
 /**
  * 数据格式化基类
- * 可以在模型中 formatConfig 中使用
+ * 可以在模型中 $formatConfig 中使用
  */
 export default class BaseFormatter {
     constructor(value, model, options, field) {

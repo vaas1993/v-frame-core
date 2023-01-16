@@ -6,7 +6,7 @@ export default class DictHelper extends AppModel {
      * 获取一组数据词典
      * @param {string} groupName 组名
      * @param {array} ignoreList 需要忽略的组成员值列表，默认不忽略任何值
-     * @returns {array<object<name, value>>}
+     * @returns {array}
      */
     static getGroup(groupName, ignoreList = []) {
         return (VFrame.getInstance().dictList[groupName] || [])

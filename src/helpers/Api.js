@@ -104,7 +104,9 @@ export default class Api {
      * @return {Api}
      */
     setHeaders(headers) {
-        this.headers = headers
+        for(let name in headers) {
+            this.setHeader(name, headers[name])
+        }
         return this
     }
 
@@ -176,7 +178,7 @@ export default class Api {
         for ( let item of filters ) {
             if( item.validate(response) ) {
                 result = new ApiResponse(item.type, item.data(response), response)
-                break;
+                break
             }
         }
 
@@ -228,7 +230,7 @@ export default class Api {
      */
     async send(method) {
         let config = this.getApiList()
-        let response = {}
+        let response
         try {
             this.onBeforeSend({
                 getParams: this.getParams,

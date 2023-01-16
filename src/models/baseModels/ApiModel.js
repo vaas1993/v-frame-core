@@ -24,7 +24,7 @@ export default class ApiModel extends BaseModel {
      */
     async detail(params = {}) {
         if( this.getPrimary() ) {
-            params[this.primaryKey] = this.getPrimary()
+            params[this.$primaryKey] = this.getPrimary()
         }
         this.response = await VFrame.getInstance().get('api').getInstance()
             .setApiName(this.constructor.DetailApi)
@@ -111,14 +111,14 @@ export default class ApiModel extends BaseModel {
      */
     getActionQueryParams() {
         let params = {}
-        params[this.primaryKey] = this.getPrimary()
+        params[this.$primaryKey] = this.getPrimary()
         return params
     }
 
     /**
      * 校验属性
      * 根据需要配置好的 rules，该方法将根据 rules 的返回值进行校验
-     * 校验通过时返回 true，不通过时返回 false，并通过 this.errors 暴露错误信息
+     * 校验通过时返回 true，不通过时返回 false，并通过 this.$errors 暴露错误信息
      * @param {boolean} isClearErrors 执行校验前是否清空错误信息
      * @param {array} fields 指定需要校验的属性，不指定时将校验所有属性
      * @returns {boolean}
@@ -127,7 +127,7 @@ export default class ApiModel extends BaseModel {
         isClearErrors ? this.clearErrors() : ''
         Schema.warning = () => {
         }
-        let rules = this.rules
+        let rules = this.$rules
         // 根据fields，过滤掉不需要校验的字段
         if( fields.length !== 0 ) {
             for (let field in rules) {
@@ -185,9 +185,9 @@ export default class ApiModel extends BaseModel {
                 mismatch: '%s 格式是错误的'
             },
             clone: function clone() {
-                let cloned = JSON.parse(JSON.stringify(this));
-                cloned.clone = this.clone;
-                return cloned;
+                let cloned = JSON.parse(JSON.stringify(this))
+                cloned.clone = this.clone
+                return cloned
             }
         }
         validator.messages(messages)

@@ -70,12 +70,12 @@ export default class FormModel extends ApiModel {
      * 判断属性的值是否为空
      * 空数组、无状态空对象、空字符串、null和undefined都视为空
      * @param {string} field
-     * @param {boolean} fromFormatConfig 判断是否为空时，是否包括 formatConfig 配置里的值
+     * @param {boolean} fromFormatConfig 判断是否为空时，是否包括 $formatConfig 配置里的值
      * @returns {boolean}
      */
     getIsEmpty(field, fromFormatConfig = true) {
         let value = this.getSource(field)
-        if( this.formatConfig[field] === undefined || fromFormatConfig === false ) {
+        if( this.$formatConfig[field] === undefined || fromFormatConfig === false ) {
             if (Array.isArray(value)) {
                 return value.length === 0
             }
@@ -105,8 +105,8 @@ export default class FormModel extends ApiModel {
             this[field] = {}
         }
         this[field] = null
-        if( this.fieldSuffix && this.getIsField(field + this.fieldSuffix) ) {
-            this[field + this.fieldSuffix] = this[field]
+        if( this.$fieldSuffix && this.getIsField(field + this.$fieldSuffix) ) {
+            this[field + this.$fieldSuffix] = this[field]
         }
     }
 }

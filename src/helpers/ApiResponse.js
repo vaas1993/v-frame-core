@@ -22,6 +22,12 @@ export default class ApiResponse {
     static ERROR_TYPE = 'error'
 
     /**
+     * 未知分类
+     * @type {string}
+     */
+    static UNKNOWN = 'unknown'
+
+    /**
      * 通过接口规则解析的接口类型
      * 接口类型用来判断 成功、失败 的大分类
      * vf会根据不同的类型来做不同的响应

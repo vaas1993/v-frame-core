@@ -1,4 +1,4 @@
-import BaseFormatter from "./BaseFormatter";
+import BaseFormatter from "./BaseFormatter"
 
 /**
  * 整型处理类

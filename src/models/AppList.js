@@ -27,7 +27,7 @@ export default class AppList {
     /**
      * 页面管理
      * 用来存储目前的页码、总数 和 单页项数
-     * @type {object<pagination, size, total>}
+     * @type {object}
      */
     pager = {
         pagination: 1,
@@ -55,7 +55,7 @@ export default class AppList {
 
     /**
      * 操作按钮列表
-     * @type {array<object<name, type>>}
+     * @type {array}
      */
     actionList = [
         {
@@ -66,7 +66,7 @@ export default class AppList {
 
     /**
      * 列表展示字段的配置
-     * @type {object<object>}
+     * @type {object}
      */
     bodyConfig = {}
 
@@ -102,7 +102,7 @@ export default class AppList {
     /**
      * 设置分页器
      * 未设置的项将使用原有的值替代
-     * @param {object<total, pagination, size>} pager
+     * @param {object} pager
      */
     setPager(pager) {
         this.pager = Object.assign({}, this.pager, pager)
@@ -110,7 +110,7 @@ export default class AppList {
 
     /**
      * 获取操作按钮列表
-     * @returns {array<object<name, type>>}
+     * @returns {array}
      */
     getActionList() {
         return this.actionList.filter(item => {

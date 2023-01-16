@@ -1,6 +1,6 @@
-import ObjectHelper from "../../helpers/ObjectHelper";
-import EventHandler from "../../helpers/EventHandler";
-import VFrame from "../../VFrame";
+import ObjectHelper from "../../helpers/ObjectHelper"
+import EventHandler from "../../helpers/EventHandler"
+import VFrame from "../../VFrame"
 
 export default class BaseModel extends EventHandler{
     /**
@@ -20,38 +20,38 @@ export default class BaseModel extends EventHandler{
      * 校验规则配置
      * @type {object}
      */
-    rules = {}
+    $rules = {}
 
     /**
      * 错误信息
-     * @type {array<object<field, message>>}
+     * @type {array<object>}
      */
-    errors = []
+    $errors = []
 
     /**
      * 主键属性
      * @type {string}
      */
-    primaryKey = 'id'
+    $primaryKey = 'id'
 
     /**
      * 属性格式化配置
-     * @type {object<{value: function|object, formatter: function, formatterOptions: object}>}
+     * @type {object}
      */
-    formatConfig = {}
+    $formatConfig = {}
 
     /**
      * 属性映射的标签名
      * @type {object}
      */
-    fieldLabels = {}
+    $fieldLabels = {}
 
     /**
      * 后缀属性指定的后缀名
      * 在 getValue 中，获取一个属性的展示值时，如果没有其它配置，会自动获取 属性名 + 后缀 组成的新属性的值
      * @type {string}
      */
-    fieldSuffix = '_view'
+    $fieldSuffix = '_view'
 
     constructor(sources = {}) {
         super()
@@ -67,7 +67,7 @@ export default class BaseModel extends EventHandler{
      * @returns {string}
      */
     getPrimary() {
-        return this[this.primaryKey]
+        return this[this.$primaryKey]
     }
 
     /**
@@ -75,7 +75,7 @@ export default class BaseModel extends EventHandler{
      * @param {string} value
      */
     setPrimary(value) {
-        this[this.primaryKey] = value
+        this[this.$primaryKey] = value
     }
 
     /**
@@ -85,7 +85,7 @@ export default class BaseModel extends EventHandler{
      * @returns {boolean}
      */
     getIsRequired(field) {
-        for (let rule of this.rules[field] || []) {
+        for (let rule of this.$rules[field] || []) {
             if (rule.required === true) {
                 return true
             }
@@ -98,14 +98,14 @@ export default class BaseModel extends EventHandler{
      * @returns {boolean}
      */
     getHasErrors() {
-        return this.errors.length !== 0
+        return this.$errors.length !== 0
     }
 
     /**
      * 清空当前实例的错误信息
      */
     clearErrors() {
-        this.errors = []
+        this.$errors = []
     }
 
     /**
@@ -114,7 +114,7 @@ export default class BaseModel extends EventHandler{
      * @param {string} message
      */
     addError(field, message) {
-        this.errors.push({
+        this.$errors.push({
             field,
             message
         })
@@ -136,7 +136,7 @@ export default class BaseModel extends EventHandler{
      * @returns {null|string}
      */
     shiftErrorMessage(field = undefined) {
-        for (let error of this.errors) {
+        for (let error of this.$errors) {
             if (field === undefined || error.field === field) {
                 return error.message
             }
@@ -159,20 +159,20 @@ export default class BaseModel extends EventHandler{
      * @returns {array<string>}
      */
     getErrors(field) {
-        return this.errors.map(error => {
+        return this.$errors.map(error => {
             return error.field === field ? error.message : null
         }).filter(v=>!!v)
     }
 
     /**
      * 获取指定属性的标签
-     * 需要在 fieldLabels 配置，否则返回属性名本身
+     * 需要在 $fieldLabels 配置，否则返回属性名本身
      * @param {string} field
      * @returns {string}
      */
     getLabel(field) {
-        if( this.fieldLabels[field] ) {
-            return this.fieldLabels[field]
+        if( this.$fieldLabels[field] ) {
+            return this.$fieldLabels[field]
         }
         return field.split('_')
             .filter(v=>!!v)
@@ -185,17 +185,17 @@ export default class BaseModel extends EventHandler{
     /**
      * 获取指定属性的展示值
      * 该方法支持将原始值格式化成展示值，这些格式化的机制包括：
-     * 1. 如果formatConfig 配置了 formatter，则实例化配置好的格式化处理类，并返回处理类格式化后的值
-     * 2. formatConfig 配置了 value 为一个 object 的键值对，该函数会将原始作为键，并返回对应的值作为展示值，如果找不到则则返回原始的值
-     * 3. formatConfig 配置了 value 为一个 function，该函数会自动调用该函数，并将返回值作为展示值
-     * 4. 如果同一个模型实例，存在一个 字段名 等于 当前获取的字段名 + this.fieldSuffix 组成的字段，则返回该后缀字段的值作为展示值
+     * 1. 如果$formatConfig 配置了 formatter，则实例化配置好的格式化处理类，并返回处理类格式化后的值
+     * 2. $formatConfig 配置了 value 为一个 object 的键值对，该函数会将原始作为键，并返回对应的值作为展示值，如果找不到则则返回原始的值
+     * 3. $formatConfig 配置了 value 为一个 function，该函数会自动调用该函数，并将返回值作为展示值
+     * 4. 如果同一个模型实例，存在一个 字段名 等于 当前获取的字段名 + this.$fieldSuffix 组成的字段，则返回该后缀字段的值作为展示值
      * 以上几个机制同时存在时只会触发一个，它们的优先级为： formatter > value.function = value.object > 后缀字段
      * @param {string} field 属性名
      * @param {*} source 指定一个特定的值进行格式化，该值指定后，返回的展示值会使用这个值作为原始值进行处理，但不会修改实例对应属性的值
      * @returns {*}
      */
     getValue(field, source = undefined) {
-        let format = this.formatConfig[field] || {}
+        let format = this.$formatConfig[field] || {}
         source = source === undefined ? this[field] : source
 
         // 助手翻译
@@ -218,8 +218,8 @@ export default class BaseModel extends EventHandler{
             })
         }
         // 后缀翻译
-        if (this[field + this.fieldSuffix]) {
-            return this[field + this.fieldSuffix]
+        if (this[field + this.$fieldSuffix]) {
+            return this[field + this.$fieldSuffix]
         }
 
         // 如果以上机制都没有匹配到，则直接返回原始值
@@ -229,27 +229,27 @@ export default class BaseModel extends EventHandler{
     /**
      * 传入一个字符串，返回该字符串是不是当前实例的属性名
      * 判断逻辑：
-     * 1. 不是模型自带的属性，比如 primaryKey，errors 这些
-     * 2. 当前实例存在该属性 或 在 formatConfig 中配置了该属性 或 在 fieldLabels 中配置了该属性
+     * 1. 不是模型自带的属性，比如 $primaryKey，$errors 这些
+     * 2. 当前实例存在该属性 或 在 $formatConfig 中配置了该属性 或 在 $fieldLabels 中配置了该属性
      * @param {string} field
      * @returns {boolean}
      */
     getIsField(field) {
         return [
-            'primaryKey',
-            'fieldSuffix',
-            'errors',
-            'formatConfig',
-            'rules',
-            'fieldLabels',
-            'response',
+            '$primaryKey',
+            '$fieldSuffix',
+            '$errors',
+            '$formatConfig',
+            '$rules',
+            '$fieldLabels',
+            '$response',
             '$unique',
             '$events',
         ].indexOf(field) === -1 && (
             Object.prototype.hasOwnProperty.call(this, field)
-            || this.formatConfig[field]
-            || this.fieldLabels[field]
-        ) && (field.indexOf(this.fieldSuffix) === -1 || this.getIsField(field.replace(this.fieldSuffix, '')))
+            || this.$formatConfig[field]
+            || this.$fieldLabels[field]
+        ) && (field.indexOf(this.$fieldSuffix) === -1 || this.getIsField(field.replace(this.$fieldSuffix, '')))
     }
 
     /**

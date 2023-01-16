@@ -1,5 +1,5 @@
 import BaseFormatter from "./BaseFormatter"
-import DictHelper from "../../helpers/DictHelper";
+import DictHelper from "../../helpers/DictHelper"
 
 /**
  * 数据辞典的格式化类

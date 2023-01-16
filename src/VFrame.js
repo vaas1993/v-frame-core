@@ -10,13 +10,29 @@ export default class VFrame {
      */
     mainConfig = {}
 
+    /**
+     * 全局参数
+     * @type {object}
+     */
     params = {}
 
+    /**
+     * 数据词典
+     * @type {object}
+     */
     dictList = {}
 
+    /**
+     * 权限列表
+     * @type {array}
+     */
     permissionList = []
 
-    user = undefined
+    /**
+     * 用户实例
+     * @type {object}
+     */
+    user
 
     toast = {
         id: undefined,
@@ -75,11 +91,11 @@ export default class VFrame {
      * @param {any} value 需要赋予的值，允许任何类型
      */
     setGlobalData(path, value) {
-        path = path.split('.')
-        if( path.length ) {
+        let paths = path.split('.')
+        if( paths.length ) {
             let item = this.globalData
-            let lastKey = path.pop()
-            for (let key of path) {
+            let lastKey = paths.pop()
+            for (let key of paths) {
                 if( typeof item[key] !== 'object' ) {
                     item[key] = {}
                 }
@@ -106,7 +122,7 @@ export default class VFrame {
 
     /**
      * 展示模态框
-     * @param {object<title, component, showClose, callback>} options
+     * @param {object} options
      */
     showModal(options) {
         this.modal = Object.assign({
@@ -139,7 +155,7 @@ export default class VFrame {
     }
     /**
      * 展示通知框
-     * @param {object<title, message, type, duration, showClose, callback>} options
+     * @param {object} options
      */
     showNotify(options) {
         this.notify = Object.assign({
@@ -155,7 +171,7 @@ export default class VFrame {
 
     /**
      * 展示轻提示框
-     * @param {object<message, type, duration, showClose>} options
+     * @param {object} options
      */
     showToast(options) {
         this.toast = Object.assign({
@@ -169,7 +185,7 @@ export default class VFrame {
 
     /**
      * 展示对话框
-     * @param {object<title, message, type, showClose, showCancel, showConfirm, cancelText, confirmText, callback>} options
+     * @param {object} options
      */
     showDialog(options) {
         this.dialog = Object.assign({
@@ -193,7 +209,7 @@ export default class VFrame {
      * @returns {Error}
      */
     getError(name, message) {
-        let error = new Error();
+        let error = new Error()
         error.name = name
         error.message = message
         return error
@@ -261,7 +277,7 @@ export default class VFrame {
     /**
      * 设置数据词典列表
      * 该方法会覆盖现有所有的词典列表
-     * @param {object<array<object<name, value>>>} list
+     * @param {object} list
      */
     setDictList(list) {
         this.dictList = list
@@ -282,11 +298,8 @@ export default class VFrame {
      */
     async install() {
         this.constructor._instance = this
-        let config = {}
-        let params = {}
-
-        config = (await import('@/configs/main')).default
-        params = (await import('@/configs/params')).default
+        let config = (await import('@/configs/main')).default
+        let params = (await import('@/configs/params')).default
         if( config.user && config.user.class ) {
             let user = new config.user.class()
             user.setSources(config.user.params || {})
@@ -298,7 +311,7 @@ export default class VFrame {
     }
 
     /**
-     * 针对VUE进行封装的初始化方法，暴露有个全局的 $vf 当VUE上下文中
+     * 针对VUE进行封装的初始化方法，暴露个全局的 $vf 当vue上下文中
      * @param {object} app VUE应用实例
      * @param {function} reactive VUE用于将普通变量转为可监听的变量
      * @returns {Promise<VFrame>}
