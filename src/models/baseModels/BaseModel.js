@@ -235,17 +235,7 @@ export default class BaseModel extends EventHandler{
      * @returns {boolean}
      */
     getIsField(field) {
-        return [
-            '$primaryKey',
-            '$fieldSuffix',
-            '$errors',
-            '$formatConfig',
-            '$rules',
-            '$fieldLabels',
-            '$response',
-            '$unique',
-            '$events',
-        ].indexOf(field) === -1 && (
+        return field.substring(0, 1) !== '$' && (
             Object.prototype.hasOwnProperty.call(this, field)
             || this.$formatConfig[field]
             || this.$fieldLabels[field]
