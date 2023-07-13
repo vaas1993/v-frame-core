@@ -69,8 +69,8 @@ export default class AuthUser extends AppModel {
     async login() {
         if( await this.action() ) {
             let user = VFrame.getInstance().user
-            user.setSources(this.response.sources)
-            user.setAccessToken(this.response.accessToken)
+            user.setSources(this.$response.getSources())
+            user.setAccessToken(this.$response['accessToken'] ?? undefined)
             await this.afterLogin()
             return true
         }

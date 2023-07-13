@@ -7,7 +7,7 @@ export default class ApiModel extends BaseModel {
     /**
      * @type {ApiResponse}
      */
-    response
+    $response
 
     /**
      * 详情信息对应的接口名
@@ -20,20 +20,20 @@ export default class ApiModel extends BaseModel {
      * 获取明细信息操作
      * 当获取成功时，将使用接口数据为当前实例对应属性赋值
      * @param {object} params 请求参数
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
     async detail(params = {}) {
         if( this.getPrimary() ) {
             params[this.$primaryKey] = this.getPrimary()
         }
-        this.response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await VFrame.getInstance().get('api').getInstance()
             .setApiName(this.constructor.DetailApi)
             .setGetParams(params)
             .get()
-        if (this.response.getIsSuccess()) {
-            this.setSources(this.response.getSources())
+        if (this.$response.getIsSuccess()) {
+            this.setSources(this.$response.getSources())
         }
-        return this.response.getIsSuccess()
+        return this.$response.getIsSuccess()
     }
 
     /**
@@ -60,16 +60,16 @@ export default class ApiModel extends BaseModel {
      */
     async list(params = {}, model) {
         params = Object.assign(params, this.getListQueryParams())
-        this.response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(params)
             .setApiName(this.constructor.ListApi)
             .get()
 
-        if (this.response.getIsSuccess()) {
-            this.response.queryParams = params
-            this.response.models = (model || this.constructor).instanceList(this.response.getItems() || [])
+        if (this.$response.getIsSuccess()) {
+            this.$response['queryParams'] = params
+            this.$response.models = (model || this.constructor).instanceList(this.$response.getItems() || [])
         }
-        return this.response.getIsSuccess()
+        return this.$response.getIsSuccess()
     }
 
     /**
@@ -121,7 +121,7 @@ export default class ApiModel extends BaseModel {
      * 校验通过时返回 true，不通过时返回 false，并通过 this.$errors 暴露错误信息
      * @param {boolean} isClearErrors 执行校验前是否清空错误信息
      * @param {array} fields 指定需要校验的属性，不指定时将校验所有属性
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
     async validate(fields = [], isClearErrors = true) {
         isClearErrors ? this.clearErrors() : ''
@@ -204,6 +204,7 @@ export default class ApiModel extends BaseModel {
 
 
     /**
+     *
      * 执行自定义远程操作的方法
      * 模型只封装了 删除、详情 和 列表 三个远程操作，这肯定是不够的
      * 现在可以通过创建一个特定的处理类，并继承对应的模型类，然后通过配置这个值就可以用来执行各种自定义的操作了
@@ -213,7 +214,7 @@ export default class ApiModel extends BaseModel {
      * @param {boolean} runValidator 调用接口前是否先调用数据校验，当校验不通过时该方法将返回 null
      * @param {boolean} isClearErrors 是否需要在调用数据校验前，清空错误信息
      * @param {string} method 请求方式，可以是 post 和 raw，默认是raw
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
     async action(runValidator = true, isClearErrors = true, method = 'raw') {
         if( isClearErrors ) {
@@ -227,20 +228,20 @@ export default class ApiModel extends BaseModel {
             return false
         }
 
-        this.response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await VFrame.getInstance().get('api').getInstance()
             .setGetParams(this.getActionQueryParams())
             .setPostParams(this.getActionRequestParams())
             .setApiName(this.constructor.ActionApi)[method.toLowerCase()]()
-        if (this.response.getIsSuccess()) {
-            this.setSources(this.response.getSources())
+        if (this.$response.getIsSuccess()) {
+            this.setSources(this.$response.getSources())
         } else {
-            if( this.response.getField() ) {
-                this.addError(this.response.getField(), this.response.getMessage())
+            if( this.$response.getField() ) {
+                this.addError(this.$response.getField(), this.$response.getMessage())
             }
         }
 
-        this.afterAction(this.response.getIsSuccess())
-        return this.response.getIsSuccess()
+        this.afterAction(this.$response.getIsSuccess())
+        return this.$response.getIsSuccess()
     }
 
     /**

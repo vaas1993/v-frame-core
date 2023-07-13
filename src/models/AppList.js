@@ -3,6 +3,12 @@ import ObjectHelper from "../helpers/ObjectHelper"
 
 export default class AppList {
     /**
+     * VFrame实例
+     * @type {VFrame}
+     */
+    $vf = VFrame.getInstance()
+
+    /**
      * 搜索模型实例
      * 这个模型需要配置好搜索表单和ListApi
      * 通过 list 方法读取到数据后将实例化成模型列表并赋值给 modelList
@@ -34,24 +40,6 @@ export default class AppList {
         size: 20,
         total: 0
     }
-
-    /**
-     * 是否展示搜索框
-     * @type {boolean}
-     */
-    isSearchShow = true
-
-    /**
-     * 是否展示导出按钮
-     * @type {boolean}
-     */
-    isExportShow = true
-
-    /**
-     * 是否展示分页器
-     * @type {boolean}
-     */
-    isPagerShow = true
 
     /**
      * 操作按钮列表
@@ -144,8 +132,8 @@ export default class AppList {
             this.modelList = []
         }
         if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.getShowModel().constructor)) {
-            this.modelList = this.modelList.concat(this.searchModel.response.models)
-            this.setPager(this.searchModel.response.listMeta)
+            this.modelList = this.modelList.concat(this.searchModel.$response.getModels())
+            this.setPager(this.searchModel.$response.getListMeta())
         }
         return true
     }
