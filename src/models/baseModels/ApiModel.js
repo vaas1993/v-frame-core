@@ -68,6 +68,8 @@ export default class ApiModel extends BaseModel {
         if (this.$response.getIsSuccess()) {
             this.$response['queryParams'] = params
             this.$response.models = (model || this.constructor).instanceList(this.$response.getItems() || [])
+        } else {
+            this.addError(this.$response.getField(), this.$response.getMessage())
         }
         return this.$response.getIsSuccess()
     }
