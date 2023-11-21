@@ -1,7 +1,4 @@
 import AppModel from "./AppModel"
-import StorageHelper from "../helpers/StorageHelper"
-import ObjectHelper from "../helpers/ObjectHelper"
-import VFrame from "../VFrame"
 export default class AuthUser extends AppModel {
     static ACCESS_TOKEN_NAME = 'ACCESS_TOKEN_NAME'
     accessToken
@@ -19,7 +16,7 @@ export default class AuthUser extends AppModel {
      * 从存储器中加载授权令牌
      */
     loadAccessToken() {
-        this.setAccessToken(StorageHelper.get(AuthUser.ACCESS_TOKEN_NAME) || undefined)
+        this.setAccessToken(this.$vf.get('storage').get(this.constructor.ACCESS_TOKEN_NAME) || undefined)
     }
 
     /**
@@ -30,9 +27,9 @@ export default class AuthUser extends AppModel {
     setAccessToken(token) {
         this.accessToken = token
         if( token === undefined ) {
-            StorageHelper.remove(AuthUser.ACCESS_TOKEN_NAME)
+            this.$vf.get('storage').remove(this.constructor.ACCESS_TOKEN_NAME)
         } else {
-            StorageHelper.set(AuthUser.ACCESS_TOKEN_NAME, token)
+            this.$vf.get('storage').set(this.constructor.ACCESS_TOKEN_NAME, token)
         }
     }
 
@@ -68,7 +65,7 @@ export default class AuthUser extends AppModel {
      */
     async login() {
         if( await this.action() ) {
-            let user = VFrame.getInstance().user
+            let user = this.$vf.user
             user.setSources(this.$response.getSources())
             user.setAccessToken(this.$response['accessToken'] ?? undefined)
             await this.afterLogin()
@@ -83,9 +80,9 @@ export default class AuthUser extends AppModel {
      */
     async logout() {
         this.setAccessToken(undefined)
-        this.setSources(ObjectHelper.forEach(this.getSources(), () => {
-            return undefined
-        }))
+        for (let field of this.getFields()) {
+            this.setEmpty(field)
+        }
         return true
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vshen/v-frame-core",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "一个JS框架，用于快速的应用开发",
   "main": "src/VFrame.js",
   "scripts": {
@@ -17,13 +17,13 @@
   },
   "homepage": "https://github.com/vaas1993/v_frame#readme",
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
-    "async-validator": "^4.0.2"
+    "@babel/runtime": "^7.23.4",
+    "async-validator": "^4.2.5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.4",
-    "@babel/core": "^7.15.5",
-    "@babel/plugin-transform-runtime": "^7.15.0",
-    "@babel/preset-env": "^7.15.4"
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-runtime": "^7.23.4",
+    "@babel/preset-env": "^7.23.3"
   }
 }

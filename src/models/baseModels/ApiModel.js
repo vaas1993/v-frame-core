@@ -1,7 +1,6 @@
 import BaseModel from "./BaseModel"
 import ObjectHelper from "../../helpers/ObjectHelper"
 import Schema from "async-validator"
-import VFrame from "../../VFrame"
 
 export default class ApiModel extends BaseModel {
     /**
@@ -26,7 +25,7 @@ export default class ApiModel extends BaseModel {
         if( this.getPrimary() ) {
             params[this.$primaryKey] = this.getPrimary()
         }
-        this.$response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await this.$vf.get('api').getInstance()
             .setApiName(this.constructor.DetailApi)
             .setGetParams(params)
             .get()
@@ -60,7 +59,7 @@ export default class ApiModel extends BaseModel {
      */
     async list(params = {}, model) {
         params = Object.assign(params, this.getListQueryParams())
-        this.$response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await this.$vf.get('api').getInstance()
             .setGetParams(params)
             .setApiName(this.constructor.ListApi)
             .get()
@@ -230,7 +229,7 @@ export default class ApiModel extends BaseModel {
             return false
         }
 
-        this.$response = await VFrame.getInstance().get('api').getInstance()
+        this.$response = await this.$vf.get('api').getInstance()
             .setGetParams(this.getActionQueryParams())
             .setPostParams(this.getActionRequestParams())
             .setApiName(this.constructor.ActionApi)[method.toLowerCase()]()

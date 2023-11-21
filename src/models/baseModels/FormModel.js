@@ -1,5 +1,4 @@
 import ApiModel from "./ApiModel"
-import VFrame from "../../VFrame"
 
 export default class FormModel extends ApiModel {
     /**
@@ -14,7 +13,7 @@ export default class FormModel extends ApiModel {
     /**
      * 获取一个用于渲染表单操作按钮的配置
      * 按钮可以配置一个 type 字段，最终点击这个按钮的时候会自动调用模型的 onForm + Type 的方法，比如 onFormCancel() 代表了 type = cancel
-     * @returns {array<object<name,type,submit,options>>}
+     * @returns {object[]}
      */
     getFormActionList() {
         return [
@@ -46,13 +45,13 @@ export default class FormModel extends ApiModel {
      * @param {function} submitHandle 该方法用于将表单组件的数据同步到当前实例中，若在按钮中已经配置了 submit: true 则将自动完成这个步骤
      */
     onFormCancel(submitHandle) {
-        VFrame.getInstance().hideModal()
+        this.$vf.hideModal()
     }
 
     /**
      * 表单提交按钮点击事件
      * @param {function} submitHandle 该方法用于将表单组件的数据同步到当前实例中，若在按钮中已经配置了 submit: true 则将自动完成这个步骤
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
     onFormSubmit(submitHandle) {
         return this.action()

@@ -199,8 +199,8 @@ export default class BaseModel extends EventHandler{
         source = source === undefined ? this[field] : source
 
         // 助手翻译
-        if (format.formatter) {
-            let formatter = new format.formatter.class(source, this, format.formatter.options || {}, field)
+        if (format['formatter']) {
+            let formatter = new format['formatter']['class'](source, this, format['formatter'].options || {}, field)
             return formatter.getValue()
         }
 
