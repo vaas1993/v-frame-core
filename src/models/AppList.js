@@ -131,7 +131,11 @@ export default class AppList {
         if( clearList ) {
             this.modelList = []
         }
-        if(await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.getShowModel().constructor)) {
+        let result = await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.getShowModel().constructor)
+        if( clearList ) {
+            this.modelList = []
+        }
+        if(result) {
             this.modelList = this.modelList.concat(this.searchModel.$response.getModels())
             this.setPager(this.searchModel.$response.getListMeta())
         }
