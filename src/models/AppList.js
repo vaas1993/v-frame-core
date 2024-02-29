@@ -128,9 +128,6 @@ export default class AppList {
      */
     async onLoad(pagination, clearList = true) {
         this.pager.pagination = pagination || this.pager.pagination++
-        if( clearList ) {
-            this.modelList = []
-        }
         let result = await this.searchModel.list({ page: this.pager.pagination, page_size: this.pager.size }, this.getShowModel().constructor)
         if( clearList ) {
             this.modelList = []
