@@ -18,7 +18,11 @@ export default class AppModel extends FormModel {
      * @returns {string}
      */
     getString(field) {
-        return this.getSource(field).toString()
+        let source = this.getSource(field)
+        if (typeof source.toString === 'function') {
+            source = source.toString()
+        }
+        return source
     }
 
     /**

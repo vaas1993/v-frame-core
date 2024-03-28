@@ -1,7 +1,8 @@
 import VFrame from "../VFrame"
 import ObjectHelper from "../helpers/ObjectHelper"
+import EventHandler from "../helpers/EventHandler"
 
-export default class AppList {
+export default class AppList extends EventHandler{
     /**
      * VFrame实例
      * @type {VFrame}
@@ -136,6 +137,7 @@ export default class AppList {
             this.modelList = this.modelList.concat(this.searchModel.$response.getModels())
             this.setPager(this.searchModel.$response.getListMeta())
         }
+        this.$emit("loaded", result)
         return true
     }
 }
