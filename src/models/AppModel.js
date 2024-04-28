@@ -19,7 +19,7 @@ export default class AppModel extends FormModel {
      */
     getString(field) {
         let source = this.getSource(field)
-        if (typeof source.toString === 'function') {
+        if (source !== undefined && typeof source.toString === 'function') {
             source = source.toString()
         }
         return source

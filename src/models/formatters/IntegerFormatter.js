@@ -13,7 +13,7 @@ export default class IntegerFormatter extends BaseFormatter {
             return null
         }
         if( this.options.before ) {
-            value = value.toString() + this.options.before
+            value = this.options.before + value.toString()
         }
         if( this.options.after ) {
             value = value.toString() + this.options.after
